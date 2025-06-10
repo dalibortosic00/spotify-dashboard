@@ -1,9 +1,10 @@
 import os
+import urllib.parse
+
+import httpx
+from dotenv import load_dotenv
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
-from dotenv import load_dotenv
-import httpx
-import urllib.parse
 
 load_dotenv()
 
@@ -13,9 +14,12 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
 
+
 @router.get("/login")
 def login():
     scopes = "user-top-read"
+    if REDIRECT_URI is None:
+        raise ValueError("REDIRECT_URI environment variable is not set")
     url = (
         "https://accounts.spotify.com/authorize?"
         f"client_id={CLIENT_ID}&"
@@ -24,6 +28,7 @@ def login():
         f"scope={urllib.parse.quote(scopes)}"
     )
     return RedirectResponse(url)
+
 
 @router.get("/callback")
 async def callback(request: Request):
@@ -38,9 +43,7 @@ async def callback(request: Request):
                 "client_id": CLIENT_ID,
                 "client_secret": CLIENT_SECRET,
             },
-            headers={
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
     token_data = response.json()
     return token_data
