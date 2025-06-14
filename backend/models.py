@@ -1,10 +1,10 @@
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, HttpUrl
 
 
 class Followers(BaseModel):
-    href: Optional[str]
+    href: Optional[str] = None
     total: int
 
 
@@ -18,53 +18,61 @@ class Restriction(BaseModel):
     reason: Literal["market", "product", "explicit"]
 
 
-class Artist(BaseModel):
-    followers: Followers
-    genres: List[str]
+# This model represents the artist object when it's nested (e.g., within a Track or Album).
+class SimplifiedArtist(BaseModel):
     href: str
     id: str
-    images: List[Image]
     name: str
-    popularity: int
     type: Literal["artist"]
     uri: str
+    external_urls: Optional[dict[str, str]] = None
 
 
-class Album(BaseModel):
+class Artist(SimplifiedArtist):
+    followers: Optional[Followers] = None
+    genres: Optional[List[str]] = None
+    images: Optional[List[Image]] = None
+    popularity: Optional[int] = None
+
+
+# This model represents an album object when it's nested within a track.
+class SimplifiedAlbum(BaseModel):
     album_type: Literal["album", "single", "compilation"]
-    total_tracks: int
+    artists: List[SimplifiedArtist]
+    available_markets: Optional[List[str]] = None
+    external_urls: Optional[dict[str, str]] = None
     href: str
     id: str
     images: List[Image]
     name: str
     release_date: str
     release_date_precision: Literal["year", "month", "day"]
-    restrictions: Optional[Restriction]
+    total_tracks: int
     type: Literal["album"]
     uri: str
-    artists: List[Artist]
+    is_playable: Optional[bool] = None
+    restrictions: Optional[Restriction] = None
 
 
 class Track(BaseModel):
-    album: Album
-    artists: List[Artist]
+    album: SimplifiedAlbum
+    artists: List[SimplifiedArtist]
     available_markets: List[str]
     disc_number: int
     duration_ms: int
     explicit: bool
+    external_urls: dict[str, str]
     href: str
     id: str
+    is_local: bool
     is_playable: bool
-    restrictions: Optional[Restriction]
     name: str
     popularity: int
     preview_url: Optional[str]
     track_number: int
     type: Literal["track"]
     uri: str
-
-
-Item = Union[Artist, Track]
+    restrictions: Optional[Restriction] = None
 
 
 class User(BaseModel):
@@ -77,3 +85,8 @@ class User(BaseModel):
     images: List[Image]
     type: Literal["user"]
     uri: str
+
+
+class TopItems(BaseModel):
+    top_artists: List[Artist]
+    top_tracks: List[Track]

@@ -1,5 +1,8 @@
 import axios from "axios";
+import { getEnvVar } from "./env";
 
-const API = axios.create({ baseURL: "http://127.0.0.1:8000" });
+const API = axios.create({
+  baseURL: getEnvVar("VITE_API_BASE_URL"),
+});
 
 export default API;

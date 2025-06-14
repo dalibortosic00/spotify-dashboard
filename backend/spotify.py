@@ -1,9 +1,8 @@
 from typing import List
 
 import httpx
+from config import settings
 from models import Artist, Track, User
-
-SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1"
 
 
 async def get_user_profile(token: str) -> User:
@@ -19,7 +18,9 @@ async def get_user_profile(token: str) -> User:
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 
     async with httpx.AsyncClient() as client:
-        response = await client.get(f"{SPOTIFY_API_BASE_URL}/me", headers=headers)
+        response = await client.get(
+            f"{settings.SPOTIFY_API_BASE_URL}/me", headers=headers
+        )
 
     response.raise_for_status()
     return response.json()
@@ -40,7 +41,7 @@ async def get_top_artists(token: str, limit: int = 10) -> List[Artist]:
 
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            f"{SPOTIFY_API_BASE_URL}/me/top/artists",
+            f"{settings.SPOTIFY_API_BASE_URL}/me/top/artists",
             headers=headers,
             params={"limit": limit},
         )
@@ -64,7 +65,7 @@ async def get_top_tracks(token: str, limit: int = 10) -> List[Track]:
 
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            f"{SPOTIFY_API_BASE_URL}/me/top/tracks",
+            f"{settings.SPOTIFY_API_BASE_URL}/me/top/tracks",
             headers=headers,
             params={"limit": limit},
         )
