@@ -1,74 +1,113 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import API from "./api";
 import type { TopItems } from "./types";
-import { getEnvVar } from "./env";
+import FactCard from "./components/FactCard";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
-  const [token, setToken] = useState<string | null>(null);
+  const { token, isCheckingToken, loginUrl } = useAuth();
   const [topItems, setTopItems] = useState<TopItems | null>(null);
+  const [isFetchingData, setIsFetchingData] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = () => {
-    window.location.href = `${getEnvVar("VITE_API_BASE_URL")}/login`;
+    window.location.href = loginUrl;
   };
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-
-    if (accessToken) {
-      setToken(accessToken);
-      localStorage.setItem("spotify_token", accessToken);
-      window.history.replaceState({}, "", "/");
-    } else {
-      const storedToken = localStorage.getItem("spotify_token");
-      if (storedToken) setToken(storedToken);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      API.get("/me/top", { params: { token } })
-        .then((response) => {
+    const fetchData = async () => {
+      if (token) {
+        setIsFetchingData(true);
+        setError(null);
+        try {
+          const response = await API.get("/me/top", { params: { token } });
           setTopItems(response.data as TopItems);
-        })
-        .catch((error: unknown) => {
-          console.error("Error fetching top items:", error);
-          setTopItems(null);
-        });
-    }
-  }, [token]);
+        } catch (err: unknown) {
+          console.error("Error fetching data:", err);
+          setError(
+            "Failed to load Spotify data. Your session might have expired. Please try logging in again.",
+          );
+          localStorage.removeItem("spotify_token");
+        } finally {
+          setIsFetchingData(false);
+        }
+      }
+    };
 
-  return (
-    <div>
-      {token ? (
-        <>
-          {topItems ? (
-            <div>
-              <h2>Top Artists</h2>
-              <ul>
-                {topItems.top_artists.map((artist) => (
-                  <li key={artist.id}>{artist.name}</li>
-                ))}
-              </ul>
-              <h2>Top Tracks</h2>
-              <ul>
-                {topItems.top_tracks.map((track) => (
-                  <li key={track.id}>{track.name}</li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            <p>Loading your top items...</p>
-          )}
-        </>
-      ) : (
-        <button type="button" onClick={handleLogin}>
-          Login with Spotify
-        </button>
-      )}
-    </div>
-  );
+    if (token && !isCheckingToken) {
+      void fetchData();
+    }
+  }, [token, isCheckingToken]);
+
+  const topArtist = topItems?.top_artists[0];
+  const topTrack = topItems?.top_tracks[0];
+
+  if (isCheckingToken) {
+    return null;
+  }
+
+  if (!token) {
+    return (
+      <button type="button" onClick={handleLogin}>
+        Login with Spotify
+      </button>
+    );
+  }
+
+  if (isFetchingData) {
+    return <p>Loading your Spotify data...</p>;
+  }
+
+  if (error) {
+    return <p className="error-message">{error}</p>;
+  }
+
+  if (topItems) {
+    return (
+      <div className="dashboard-grid">
+        {topArtist && (
+          <FactCard
+            title="Your Top Artist"
+            value={topArtist.name}
+            description="You couldn't get enough of them this year!"
+            icon={
+              <span role="img" aria-label="star">
+                ⭐
+              </span>
+            }
+            imageUrl={
+              topArtist.images && topArtist.images.length > 0
+                ? topArtist.images[0].url
+                : undefined
+            }
+            imageAlt={topArtist.name}
+          />
+        )}
+
+        {topTrack && (
+          <FactCard
+            title="Your Top Track"
+            value={topTrack.name}
+            description={`by ${topTrack.artists.map((a) => a.name).join(", ")}`}
+            icon={
+              <span role="img" aria-label="music note">
+                🎵
+              </span>
+            }
+            imageUrl={
+              topTrack.album.images.length > 0
+                ? topTrack.album.images[0].url
+                : undefined
+            }
+            imageAlt={`${topTrack.name} by ${topTrack.artists[0].name}`}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Fallback if topItems is null but no specific error or loading state
+  return <p>No data available. Please log in to see your Spotify Dashboard.</p>;
 }
 
 export default App;
