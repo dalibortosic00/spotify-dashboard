@@ -1,5 +1,5 @@
 import type { ReactNode, FC } from "react";
-import Card from "./Card";
+import Card from "./Card.tsx";
 import "./FactCard.css";
 
 interface FactCardProps {

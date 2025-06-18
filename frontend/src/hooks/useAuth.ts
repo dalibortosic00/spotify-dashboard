@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getEnvVar } from "../env";
+import { getEnvVar } from "../env.ts";
 
 interface AuthState {
   token: string | null;

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import API from "./api";
-import type { TopItems } from "./types";
-import FactCard from "./components/FactCard";
-import { useAuth } from "./hooks/useAuth";
+import API from "./api.ts";
+import type { TopItems } from "./types.ts";
+import FactCard from "./components/FactCard.tsx";
+import { useAuth } from "./hooks/useAuth.ts";
 
 function App() {
   const { token, isCheckingToken, loginUrl } = useAuth();
