@@ -8,7 +8,7 @@ import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", ".yarn", ".pnp.*"] },
   {
     extends: [
       js.configs.recommended,
@@ -18,7 +18,7 @@ export default tseslint.config(
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: "latest",
       globals: globals.browser,
       parserOptions: {
         project: ["./tsconfig.node.json", "./tsconfig.app.json"],

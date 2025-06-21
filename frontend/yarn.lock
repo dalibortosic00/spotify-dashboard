@@ -2178,6 +2178,7 @@ __metadata:
     react-dom: "npm:19.1.0"
     react-is: "npm:19.1.0"
     recharts: "npm:2.15.3"
+    ts-api-utils: "npm:^2.1.0"
     typescript: "npm:5.8.3"
     typescript-eslint: "npm:8.34.1"
     vite: "npm:6.3.5"
