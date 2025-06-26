@@ -8,6 +8,7 @@ frontend/dist/
 frontend/dist-ssr/
 frontend/*.local
 frontend/.yarn/cache
+frontend/.yarn/unplugged
 
 logs/
 *.log
