@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import API from "./api.ts";
 import type { TopItems } from "./types.ts";
 import FactCard from "./components/FactCard.tsx";
+import TopItemsCard from "./components/TopItemsCard.tsx";
 import { useAuth } from "./hooks/useAuth.ts";
 
 function App() {
@@ -39,9 +40,6 @@ function App() {
     }
   }, [token, isCheckingToken]);
 
-  const topArtist = topItems?.top_artists[0];
-  const topTrack = topItems?.top_tracks[0];
-
   if (isCheckingToken) {
     return null;
   }
@@ -63,43 +61,42 @@ function App() {
   }
 
   if (topItems) {
+    const topArtist = topItems.top_artists[0];
+    const topTrack = topItems.top_tracks[0];
+
     return (
       <div className="dashboard-grid">
-        {topArtist && (
-          <FactCard
-            title="Your Top Artist"
-            value={topArtist.name}
-            description="You couldn't get enough of them this year!"
-            icon={
-              <span role="img" aria-label="star">
-                ⭐
-              </span>
-            }
-            imageUrl={
-              topArtist.images && topArtist.images.length > 0
-                ? topArtist.images[0].url
-                : undefined
-            }
-            imageAlt={topArtist.name}
+        <FactCard
+          title="Your Top Artist"
+          item={topArtist}
+          icon={
+            <span role="img" aria-label="star">
+              ⭐
+            </span>
+          }
+        />
+
+        <FactCard
+          title="Your Top Track"
+          item={topTrack}
+          icon={
+            <span role="img" aria-label="music note">
+              🎵
+            </span>
+          }
+        />
+
+        {topItems.top_artists.length > 1 && (
+          <TopItemsCard
+            title="Your Top Artists"
+            items={topItems.top_artists.slice(0, 10)}
           />
         )}
 
-        {topTrack && (
-          <FactCard
-            title="Your Top Track"
-            value={topTrack.name}
-            description={`by ${topTrack.artists.map((a) => a.name).join(", ")}`}
-            icon={
-              <span role="img" aria-label="music note">
-                🎵
-              </span>
-            }
-            imageUrl={
-              topTrack.album.images.length > 0
-                ? topTrack.album.images[0].url
-                : undefined
-            }
-            imageAlt={`${topTrack.name} by ${topTrack.artists[0].name}`}
+        {topItems.top_tracks.length > 1 && (
+          <TopItemsCard
+            title="Your Top Tracks"
+            items={topItems.top_tracks.slice(0, 10)}
           />
         )}
       </div>

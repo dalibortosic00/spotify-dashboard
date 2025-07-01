@@ -35,3 +35,24 @@
   line-height: 1.4;
   margin-top: 5px;
 }
+
+.fact-item-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-radius: inherit;
+}
+
+.fact-item-link:hover {
+  cursor: pointer;
+}
+
+.fact-item-link .fact-card-value,
+.fact-item-link .fact-card-description {
+  color: inherit;
+}

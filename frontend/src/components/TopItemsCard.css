@@ -1,0 +1,29 @@
+.top-item-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  transition: background-color 0.2s ease;
+  padding: 5px 0;
+  border-radius: 4px;
+}
+
+.top-item-link:hover {
+  background-color: #282828;
+  cursor: pointer;
+}
+
+.top-item-link .card-image {
+  flex-shrink: 0;
+  margin-right: 15px;
+}
+
+.top-item-link .card-text {
+  flex-grow: 1;
+}
+
+.top-item-link h4,
+.top-item-link p {
+  color: inherit;
+}
