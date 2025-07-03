@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
+import type { FC } from "react";
 import API from "./api.ts";
 import type { TopItems } from "./types.ts";
 import FactCard from "./components/FactCard.tsx";
 import TopItemsCard from "./components/TopItemsCard.tsx";
 import { useAuth } from "./hooks/useAuth.ts";
+import ChartCard from "./components/ChartCard.tsx";
+import GenreChart from "./components/GenreChart.tsx";
 
-function App() {
+const App: FC = () => {
   const { token, isCheckingToken, loginUrl } = useAuth();
   const [topItems, setTopItems] = useState<TopItems | null>(null);
   const [isFetchingData, setIsFetchingData] = useState(false);
@@ -61,14 +64,11 @@ function App() {
   }
 
   if (topItems) {
-    const topArtist = topItems.top_artists[0];
-    const topTrack = topItems.top_tracks[0];
-
     return (
       <div className="dashboard-grid">
         <FactCard
           title="Your Top Artist"
-          item={topArtist}
+          item={topItems.top_artists[0]}
           icon={
             <span role="img" aria-label="star">
               ⭐
@@ -78,7 +78,7 @@ function App() {
 
         <FactCard
           title="Your Top Track"
-          item={topTrack}
+          item={topItems.top_tracks[0]}
           icon={
             <span role="img" aria-label="music note">
               🎵
@@ -99,12 +99,21 @@ function App() {
             items={topItems.top_tracks.slice(0, 10)}
           />
         )}
+
+        {topItems.top_artists.length > 1 && (
+          <ChartCard
+            title="Your Top Genres"
+            subtitle="Based on your top artists"
+          >
+            <GenreChart artists={topItems.top_artists} />
+          </ChartCard>
+        )}
       </div>
     );
   }
 
   // Fallback if topItems is null but no specific error or loading state
   return <p>No data available. Please log in to see your Spotify Dashboard.</p>;
-}
+};
 
 export default App;
