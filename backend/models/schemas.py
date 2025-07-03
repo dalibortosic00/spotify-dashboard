@@ -1,6 +1,7 @@
-from typing import List, Literal, Optional
+from typing import Generic, List, Literal, Optional, TypeVar
 
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl
+from pydantic.generics import GenericModel
 
 
 class Followers(BaseModel):
@@ -87,6 +88,25 @@ class User(BaseModel):
     uri: str
 
 
+class TopItemsParams(BaseModel):
+    limit: int = Field(20, ge=1, le=50)
+    time_range: Literal["long_term", "medium_term", "short_term"] = "medium_term"
+    offset: int = Field(0, ge=0)
+
+
+T = TypeVar("T", Artist, Track)
+
+
+class TopItemsResponse(GenericModel, Generic[T]):
+    href: str
+    limit: int
+    next: Optional[str]
+    offset: int
+    previous: Optional[str]
+    total: int
+    items: List[T]
+
+
 class TopItems(BaseModel):
-    top_artists: List[Artist]
-    top_tracks: List[Track]
+    top_artists: TopItemsResponse[Artist]
+    top_tracks: TopItemsResponse[Track]

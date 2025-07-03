@@ -4,8 +4,6 @@ import httpx
 from config import settings
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
-from models import TopItems, User
-from spotify import get_top_artists, get_top_tracks, get_user_profile
 
 router = APIRouter()
 
@@ -76,50 +74,3 @@ async def callback(request: Request) -> RedirectResponse:
 
     redirect_url = f"{settings.FRONTEND_URL}/?access_token={access_token}"
     return RedirectResponse(url=redirect_url)
-
-
-@router.get("/me")
-async def get_user(request: Request) -> User:
-    """
-    Fetches the user's Spotify profile information.
-
-    Args:
-        request (Request): The incoming request containing the access token.
-
-    Returns:
-        dict: A dictionary containing the user's profile information.
-
-    Raises:
-        HTTPException: If the access token is missing or the request fails.
-    """
-    token = request.query_params.get("token")
-    if not token:
-        raise HTTPException(status_code=400, detail="Access token required")
-
-    user_profile = await get_user_profile(token)
-    return user_profile
-
-
-@router.get("/me/top", response_model=TopItems)
-async def get_user_top_items(
-    request: Request,
-) -> TopItems:
-    """
-    Fetches the user's top tracks and artists from Spotify.
-
-    Args:
-        request (Request): The incoming request containing the access token.
-
-    Returns:
-        TopItems: An object containing the user's top artists and tracks.
-
-    Raises:
-        HTTPException: If the access token is missing or the request fails.
-    """
-    token = request.query_params.get("token")
-    if not token:
-        raise HTTPException(status_code=400, detail="Access token required")
-
-    top_artists = await get_top_artists(token)
-    top_tracks = await get_top_tracks(token)
-    return TopItems(top_artists=top_artists, top_tracks=top_tracks)
