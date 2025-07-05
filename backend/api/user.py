@@ -1,5 +1,14 @@
+from typing import cast
+
 from fastapi import APIRouter, Depends, HTTPException, Request
-from models.schemas import TopItems, TopItemsParams, User
+from models.schemas import (
+    Artist,
+    TopItems,
+    TopItemsParams,
+    TopItemsResponse,
+    Track,
+    User,
+)
 from services.spotify import get_top_items, get_user_profile
 
 router = APIRouter()
@@ -48,6 +57,10 @@ async def get_user_top_items(
     if not token:
         raise HTTPException(status_code=400, detail="Access token required")
 
-    top_artists = await get_top_items(token, "artists", params)
-    top_tracks = await get_top_items(token, "tracks", params)
+    top_artists = cast(
+        TopItemsResponse[Artist], await get_top_items(token, "artists", params)
+    )
+    top_tracks = cast(
+        TopItemsResponse[Track], await get_top_items(token, "tracks", params)
+    )
     return TopItems(top_artists=top_artists, top_tracks=top_tracks)
