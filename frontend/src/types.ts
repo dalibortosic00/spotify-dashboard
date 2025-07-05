@@ -87,7 +87,7 @@ export interface User {
   uri: string;
 }
 
-export interface TopItemsResponse<T> {
+export interface TopItemsResponse<T extends Artist | Track> {
   href: string;
   limit: number;
   next?: string;
