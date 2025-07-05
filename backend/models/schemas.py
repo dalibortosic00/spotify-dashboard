@@ -1,7 +1,6 @@
 from typing import Generic, List, Literal, Optional, TypeVar
 
 from pydantic import BaseModel, Field, HttpUrl
-from pydantic.generics import GenericModel
 
 
 class Followers(BaseModel):
@@ -97,7 +96,7 @@ class TopItemsParams(BaseModel):
 T = TypeVar("T", Artist, Track)
 
 
-class TopItemsResponse(GenericModel, Generic[T]):
+class TopItemsResponse(BaseModel, Generic[T]):
     href: str
     limit: int
     next: Optional[str]
