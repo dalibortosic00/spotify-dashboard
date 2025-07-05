@@ -64,11 +64,13 @@ const App: FC = () => {
   }
 
   if (topItems) {
+    const { top_artists, top_tracks } = topItems;
+
     return (
       <div className="dashboard-grid">
         <FactCard
           title="Your Top Artist"
-          item={topItems.top_artists[0]}
+          item={top_artists.items[0]}
           icon={
             <span role="img" aria-label="star">
               ⭐
@@ -78,7 +80,7 @@ const App: FC = () => {
 
         <FactCard
           title="Your Top Track"
-          item={topItems.top_tracks[0]}
+          item={top_tracks.items[0]}
           icon={
             <span role="img" aria-label="music note">
               🎵
@@ -86,26 +88,26 @@ const App: FC = () => {
           }
         />
 
-        {topItems.top_artists.length > 1 && (
+        {top_artists.items.length > 1 && (
           <TopItemsCard
             title="Your Top Artists"
-            items={topItems.top_artists.slice(0, 10)}
+            items={top_artists.items.slice(0, 10)}
           />
         )}
 
-        {topItems.top_tracks.length > 1 && (
+        {top_tracks.items.length > 1 && (
           <TopItemsCard
             title="Your Top Tracks"
-            items={topItems.top_tracks.slice(0, 10)}
+            items={top_tracks.items.slice(0, 10)}
           />
         )}
 
-        {topItems.top_artists.length > 1 && (
+        {top_artists.items.length > 1 && (
           <ChartCard
             title="Your Top Genres"
             subtitle="Based on your top artists"
           >
-            <GenreChart artists={topItems.top_artists} />
+            <GenreChart artists={top_artists.items} />
           </ChartCard>
         )}
       </div>

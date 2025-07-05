@@ -87,7 +87,17 @@ export interface User {
   uri: string;
 }
 
+export interface TopItemsResponse<T> {
+  href: string;
+  limit: number;
+  next?: string;
+  offset: number;
+  previous?: string;
+  total: number;
+  items: T[];
+}
+
 export interface TopItems {
-  top_artists: Artist[];
-  top_tracks: Track[];
+  top_artists: TopItemsResponse<Artist>;
+  top_tracks: TopItemsResponse<Track>;
 }
