@@ -87,6 +87,14 @@ export interface User {
   uri: string;
 }
 
+export type TimeRange = "long_term" | "medium_term" | "short_term";
+
+export interface TopItemsParams {
+  limit?: number;
+  offset?: number;
+  time_range?: TimeRange;
+}
+
 export interface TopItemsResponse<T extends Artist | Track> {
   href: string;
   limit: number;

@@ -1,51 +1,27 @@
-import { useState, useEffect } from "react";
 import type { FC } from "react";
-import API from "./api.ts";
-import type { TopItems } from "./types.ts";
 import FactCard from "./components/FactCard.tsx";
 import TopItemsCard from "./components/TopItemsCard.tsx";
 import { useAuth } from "./hooks/useAuth.ts";
+import { useTopItems } from "./hooks/useTopItems.ts";
 import ChartCard from "./components/ChartCard.tsx";
 import GenreChart from "./components/GenreChart.tsx";
 
 const App: FC = () => {
   const { token, isCheckingToken, loginUrl } = useAuth();
-  const [topItems, setTopItems] = useState<TopItems | null>(null);
-  const [isFetchingData, setIsFetchingData] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: topItems,
+    isLoading,
+    error,
+  } = useTopItems({
+    token,
+    enabled: !isCheckingToken,
+  });
 
   const handleLogin = () => {
     window.location.href = loginUrl;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (token) {
-        setIsFetchingData(true);
-        setError(null);
-        try {
-          const response = await API.get("/me/top", { params: { token } });
-          setTopItems(response.data as TopItems);
-        } catch (err: unknown) {
-          console.error("Error fetching data:", err);
-          setError(
-            "Failed to load Spotify data. Your session might have expired. Please try logging in again.",
-          );
-          localStorage.removeItem("spotify_token");
-        } finally {
-          setIsFetchingData(false);
-        }
-      }
-    };
-
-    if (token && !isCheckingToken) {
-      void fetchData();
-    }
-  }, [token, isCheckingToken]);
-
-  if (isCheckingToken) {
-    return null;
-  }
+  if (isCheckingToken) return null;
 
   if (!token) {
     return (
@@ -55,12 +31,15 @@ const App: FC = () => {
     );
   }
 
-  if (isFetchingData) {
-    return <p>Loading your Spotify data...</p>;
-  }
+  if (isLoading) return <p>Loading your Spotify data...</p>;
 
   if (error) {
-    return <p className="error-message">{error}</p>;
+    return (
+      <p className="error-message">
+        Failed to load Spotify data. Your session might have expired. Please try
+        logging in again.
+      </p>
+    );
   }
 
   if (topItems) {
