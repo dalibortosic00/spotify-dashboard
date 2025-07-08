@@ -9,3 +9,12 @@ export const queryClient = new QueryClient({
     },
   },
 });
+
+// Support for the TanStack Query Devtools Chrome extension
+declare global {
+  interface Window {
+    __TANSTACK_QUERY_CLIENT__: import("@tanstack/query-core").QueryClient;
+  }
+}
+
+window.__TANSTACK_QUERY_CLIENT__ = queryClient;

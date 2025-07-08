@@ -904,7 +904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.81.5":
+"@tanstack/query-core@npm:5.81.5, @tanstack/query-core@npm:^5.81.5":
   version: 5.81.5
   resolution: "@tanstack/query-core@npm:5.81.5"
   checksum: 10c0/8d3af841f0e2f3fba1dfd100a8bbc2d07e7b1d5b8570d3d0d8bba5127601c2788e5f7c84839f93f3b0cbe54f14866c1fef8e3f9e745f02d27afaaeea33b7b755
@@ -2322,6 +2322,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@eslint/js": "npm:9.30.1"
+    "@tanstack/query-core": "npm:^5.81.5"
     "@tanstack/react-query": "npm:^5.81.5"
     "@tanstack/react-query-devtools": "npm:^5.81.5"
     "@types/react": "npm:19.1.8"

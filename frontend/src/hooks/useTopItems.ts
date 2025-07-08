@@ -16,7 +16,6 @@ export const useTopItems = ({
   return useQuery<TopItems>({
     queryKey: ["topItems", token, params],
     queryFn: async () => {
-      console.log("Fetching /me/top from API");
       const response = await API.get("/me/top", {
         params: { token, ...params },
       });
