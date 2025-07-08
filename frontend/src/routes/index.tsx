@@ -1,12 +1,16 @@
-import type { FC } from "react";
-import FactCard from "./components/FactCard.tsx";
-import TopItemsCard from "./components/TopItemsCard.tsx";
-import { useAuth } from "./hooks/useAuth.ts";
-import { useTopItems } from "./hooks/useTopItems.ts";
-import ChartCard from "./components/ChartCard.tsx";
-import GenreChart from "./components/GenreChart.tsx";
+import FactCard from "../components/FactCard.tsx";
+import TopItemsCard from "../components/TopItemsCard.tsx";
+import { useAuth } from "../hooks/useAuth.ts";
+import { useTopItems } from "../hooks/useTopItems.ts";
+import ChartCard from "../components/ChartCard.tsx";
+import GenreChart from "../components/GenreChart.tsx";
+import { createFileRoute } from "@tanstack/react-router";
 
-const App: FC = () => {
+export const Route = createFileRoute("/")({
+  component: DashboardPage,
+});
+
+function DashboardPage() {
   const { token, isCheckingToken, loginUrl } = useAuth();
   const {
     data: topItems,
@@ -95,6 +99,4 @@ const App: FC = () => {
 
   // Fallback if topItems is null but no specific error or loading state
   return <p>No data available. Please log in to see your Spotify Dashboard.</p>;
-};
-
-export default App;
+}

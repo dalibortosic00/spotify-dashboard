@@ -1,7 +1,14 @@
 {
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
   "search.exclude": {
     "**/.yarn": true,
-    "**/.pnp.*": true
+    "**/.pnp.*": true,
+    "**/routeTree.gen.ts": true
   },
   "eslint.nodePath": "frontend/.yarn/sdks",
   "prettier.prettierPath": "frontend/.yarn/sdks/prettier/index.cjs",
