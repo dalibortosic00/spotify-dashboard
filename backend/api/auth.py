@@ -1,9 +1,11 @@
+import base64
 import urllib.parse
 
 import httpx
 from config import settings
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
+from models.schemas import TokenResponse
 
 router = APIRouter()
 
@@ -48,6 +50,10 @@ async def callback(request: Request) -> RedirectResponse:
     if not code:
         raise HTTPException(status_code=400, detail="Missing authorization code")
 
+    basic_auth = base64.b64encode(
+        f"{settings.CLIENT_ID}:{settings.CLIENT_SECRET}".encode()
+    ).decode()
+
     async with httpx.AsyncClient() as client:
         response = await client.post(
             f"{settings.SPOTIFY_ACCOUNTS_BASE_URL}/api/token",
@@ -55,10 +61,11 @@ async def callback(request: Request) -> RedirectResponse:
                 "grant_type": "authorization_code",
                 "code": code,
                 "redirect_uri": settings.REDIRECT_URI,
-                "client_id": settings.CLIENT_ID,
-                "client_secret": settings.CLIENT_SECRET,
             },
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            headers={
+                "Authorization": f"Basic {basic_auth}",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
         )
 
     if response.status_code != 200:
@@ -66,11 +73,10 @@ async def callback(request: Request) -> RedirectResponse:
             status_code=500, detail=f"Token exchange failed: {response.text}"
         )
 
-    token_data = response.json()
-    access_token = token_data.get("access_token")
+    token_data = TokenResponse.model_validate(response.json())
 
-    if not access_token:
+    if not token_data.access_token:
         raise HTTPException(status_code=500, detail="No access token returned")
 
-    redirect_url = f"{settings.FRONTEND_URL}/?access_token={access_token}"
-    return RedirectResponse(url=redirect_url)
+    url = f"{settings.FRONTEND_URL}/?access_token={token_data.access_token}"
+    return RedirectResponse(url=url)

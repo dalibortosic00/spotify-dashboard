@@ -87,6 +87,14 @@ class User(BaseModel):
     uri: str
 
 
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
+    scope: str
+    expires_in: int
+    refresh_token: Optional[str] = None
+
+
 class TopItemsParams(BaseModel):
     limit: int = Field(20, ge=1, le=50)
     time_range: Literal["long_term", "medium_term", "short_term"] = "medium_term"
