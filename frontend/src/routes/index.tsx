@@ -4,14 +4,22 @@ import { useAuth } from "../hooks/useAuth.ts";
 import { useTopItems } from "../hooks/useTopItems.ts";
 import ChartCard from "../components/ChartCard.tsx";
 import GenreChart from "../components/GenreChart.tsx";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { getStoredToken } from "../utils/auth.ts";
 
 export const Route = createFileRoute("/")({
+    beforeLoad: () => {
+    const token = getStoredToken();
+    if (!token) {
+      /* eslint-disable-next-line @typescript-eslint/only-throw-error */
+      throw redirect({ to: "/login" });
+    }
+  },
   component: DashboardPage,
 });
 
 function DashboardPage() {
-  const { token, isCheckingToken, loginUrl } = useAuth();
+  const { token, isCheckingToken } = useAuth();
   const {
     data: topItems,
     isLoading,
@@ -20,20 +28,6 @@ function DashboardPage() {
     token,
     enabled: !isCheckingToken,
   });
-
-  const handleLogin = () => {
-    window.location.href = loginUrl;
-  };
-
-  if (isCheckingToken) return null;
-
-  if (!token) {
-    return (
-      <button type="button" onClick={handleLogin}>
-        Login with Spotify
-      </button>
-    );
-  }
 
   if (isLoading) return <p>Loading your Spotify data...</p>;
 

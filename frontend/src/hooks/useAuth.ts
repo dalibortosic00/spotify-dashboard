@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getEnvVar } from "../env.ts";
+import { getStoredToken } from "../utils/auth.ts";
 
 interface AuthState {
   token: string | null;
@@ -14,17 +15,8 @@ export const useAuth = (): AuthState => {
   const loginUrl = `${getEnvVar("VITE_API_BASE_URL")}/login`;
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-    const storedToken = localStorage.getItem("spotify_token");
-
-    if (accessToken) {
-      setToken(accessToken);
-      localStorage.setItem("spotify_token", accessToken);
-      window.history.replaceState({}, "", "/");
-    } else if (storedToken) {
-      setToken(storedToken);
-    }
+    const token = getStoredToken();
+    setToken(token);
     setIsCheckingToken(false);
   }, []);
 
