@@ -1,10 +1,10 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAuth } from "../hooks/useAuth.ts";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute("/login")({
   component: LoginPage,
-})
+});
 
 function LoginPage() {
   const { token, isCheckingToken, loginUrl } = useAuth();
@@ -24,7 +24,9 @@ function LoginPage() {
 
   return (
     <div>
-      <button type="button" onClick={handleLogin}>Login with Spotify</button>
+      <button type="button" onClick={handleLogin}>
+        Login with Spotify
+      </button>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { getStoredToken } from "../utils/auth.ts";
 
 export const Route = createFileRoute("/")({
-    beforeLoad: () => {
+  beforeLoad: () => {
     const token = getStoredToken();
     if (!token) {
       /* eslint-disable-next-line @typescript-eslint/only-throw-error */
