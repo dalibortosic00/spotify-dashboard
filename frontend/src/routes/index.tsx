@@ -5,12 +5,12 @@ import { useTopItems } from "../hooks/useTopItems.ts";
 import ChartCard from "../components/ChartCard.tsx";
 import GenreChart from "../components/GenreChart.tsx";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { getStoredToken } from "../utils/auth.ts";
+import { getStoredAuth } from "../utils/auth.ts";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
-    const token = getStoredToken();
-    if (!token) {
+    const auth = getStoredAuth();
+    if (!auth) {
       /* eslint-disable-next-line @typescript-eslint/only-throw-error */
       throw redirect({ to: "/login" });
     }

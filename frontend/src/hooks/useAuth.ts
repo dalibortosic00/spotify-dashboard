@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getEnvVar } from "../env.ts";
-import { getStoredToken } from "../utils/auth.ts";
+import { getStoredAuth } from "../utils/auth.ts";
 
 interface AuthState {
   token: string | null;
@@ -15,8 +15,8 @@ export const useAuth = (): AuthState => {
   const loginUrl = `${getEnvVar("VITE_API_BASE_URL")}/login`;
 
   useEffect(() => {
-    const token = getStoredToken();
-    setToken(token);
+    const auth = getStoredAuth();
+    setToken(auth ? auth.token : null);
     setIsCheckingToken(false);
   }, []);
 
