@@ -142,3 +142,20 @@ footer p {
   margin: 0;
   font-size: 0.9em;
 }
+
+.time-range-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.time-range-buttons button {
+  background-color: #282828;
+  color: #b3b3b3;
+}
+
+.time-range-buttons button.active {
+  background-color: #1db954;
+  color: #ffffff;
+}
