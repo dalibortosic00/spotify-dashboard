@@ -76,9 +76,8 @@ class Track(BaseModel):
 
 
 class User(BaseModel):
-    country: str
     display_name: str
-    email: str
+    external_urls: Optional[dict[str, str]] = None
     followers: Followers
     href: str
     id: str

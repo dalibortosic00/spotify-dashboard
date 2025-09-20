@@ -76,9 +76,8 @@ export interface Track {
 }
 
 export interface User {
-  country: string;
   display_name: string;
-  email: string;
+  external_urls: { spotify: string };
   followers: Followers;
   href: string;
   id: string;

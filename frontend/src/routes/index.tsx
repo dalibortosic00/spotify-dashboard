@@ -4,6 +4,7 @@ import FactCard from "../components/FactCard.tsx";
 import TopItemsCard from "../components/TopItemsCard.tsx";
 import { useAuth } from "../hooks/useAuth.ts";
 import { useTopItems } from "../hooks/useTopItems.ts";
+import { useCurrentUser } from "../hooks/useCurrentUser.ts";
 // import ChartCard from "../components/ChartCard.tsx";
 // import GenreChart from "../components/GenreChart.tsx";
 import { getStoredAuth } from "../utils/auth.ts";
@@ -33,6 +34,7 @@ function DashboardPage() {
     params: { time_range: timeRange, limit },
     enabled: !isCheckingToken,
   });
+  const { data: currentUser } = useCurrentUser({ token });
 
   if (error) {
     return (
@@ -48,6 +50,9 @@ function DashboardPage() {
 
   return (
     <>
+      <h1>
+        {currentUser ? `Welcome, ${currentUser.display_name}` : "Welcome"}
+      </h1>
       <div className="time-range-buttons">
         <button
           type="button"
