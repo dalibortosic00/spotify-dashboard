@@ -49,40 +49,44 @@ const FactCard: FC<FactCardProps> = ({ title, item, icon, isLoading }) => {
     }
   }
 
-  const content = isLoading ? (
-    <FactCardSkeleton />
-  ) : (
-    <>
-      {imageUrl ? (
-        <img
-          src={imageUrl}
-          alt={imageAlt ?? title}
-          className="fact-card-image"
-        />
-      ) : (
-        icon && <div className="fact-card-icon">{icon}</div>
-      )}
-      <div className="fact-card-value">{value}</div>
-      <p className="fact-card-description">{description}</p>
-    </>
-  );
+  let content: ReactNode;
+
+  if (isLoading) {
+    content = <FactCardSkeleton />;
+  } else {
+    content = (
+      <>
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={imageAlt ?? title}
+            className="fact-card-image"
+          />
+        ) : (
+          icon && <div className="fact-card-icon">{icon}</div>
+        )}
+        <div className="fact-card-value">{value}</div>
+        <p className="fact-card-description">{description}</p>
+      </>
+    );
+
+    if (itemUrl) {
+      content = (
+        <a
+          href={itemUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fact-item-link"
+        >
+          {content}
+        </a>
+      );
+    }
+  }
 
   return (
     <Card title={title}>
-      <div className="fact-card-content">
-        {itemUrl ? (
-          <a
-            href={itemUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fact-item-link"
-          >
-            {content}
-          </a>
-        ) : (
-          content
-        )}
-      </div>
+      <div className="fact-card-content">{content}</div>
     </Card>
   );
 };
