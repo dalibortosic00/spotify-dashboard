@@ -18,10 +18,10 @@ const FactCardSkeleton: FC = () => {
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
       <Skeleton className="fact-card-image" />
       <div className="fact-card-value">
-        <Skeleton />
+        <Skeleton width="120px"/>
       </div>
       <p className="fact-card-description">
-        <Skeleton width="80%" />
+        <Skeleton width="80px" />
       </p>
     </SkeletonTheme>
   );
