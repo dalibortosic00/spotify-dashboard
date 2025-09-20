@@ -17,7 +17,7 @@ export const queryClient = new QueryClient({
 });
 
 const router = createRouter({
-  /* eslint-disable */
+  /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
   routeTree,
   context: { queryClient },
   defaultPreload: "intent",

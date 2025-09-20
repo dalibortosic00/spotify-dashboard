@@ -1,4 +1,6 @@
 import type { ReactNode, FC } from "react";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import Card from "./Card.tsx";
 import "./FactCard.css";
 import type { Artist, Track } from "../types.ts";
@@ -6,83 +8,71 @@ import { isArtist, isTrack } from "../utils/typeGuards.ts";
 
 interface FactCardProps {
   title: string;
-  value?: string;
-  description?: string;
-  icon?: ReactNode;
-  imageUrl?: string;
-  imageAlt?: string;
-  itemUrl?: string;
   item?: Artist | Track;
+  icon?: ReactNode;
+  isLoading?: boolean;
 }
 
-const FactCard: FC<FactCardProps> = ({
-  title,
-  value,
-  description,
-  icon,
-  imageUrl,
-  imageAlt,
-  itemUrl,
-  item,
-}) => {
-  const derivedValue = item ? item.name : value;
+const FactCardSkeleton: FC = () => {
+  return (
+    <SkeletonTheme baseColor="#202020" highlightColor="#444">
+      <Skeleton className="fact-card-image" />
+      <div className="fact-card-value">
+        <Skeleton />
+      </div>
+      <p className="fact-card-description">
+        <Skeleton width="80%" />
+      </p>
+    </SkeletonTheme>
+  );
+};
 
-  const derivedDescription = item
-    ? isArtist(item)
-      ? "You couldn't get enough of them this year!"
-      : isTrack(item)
-        ? `by ${item.artists.map((a) => a.name).join(", ")}`
-        : description
-    : description;
+const FactCard: FC<FactCardProps> = ({ title, item, icon, isLoading }) => {
+  let value: string | undefined;
+  let itemUrl: string | undefined;
+  let description: string | undefined;
+  let imageUrl: string | undefined;
+  let imageAlt: string | undefined;
 
-  const derivedImageUrl = item
-    ? isArtist(item)
-      ? (item.images?.[0]?.url ?? undefined)
-      : isTrack(item)
-        ? item.album.images[0]?.url || undefined
-        : imageUrl
-    : imageUrl;
+  if (item) {
+    value = item.name;
+    itemUrl = item.external_urls?.spotify ?? undefined;
 
-  const derivedImageAlt = item
-    ? isArtist(item)
-      ? item.name
-      : isTrack(item)
-        ? `${item.name} by ${item.artists[0]?.name}`
-        : imageAlt
-    : imageAlt;
+    if (isArtist(item)) {
+      description = "You couldn't get enough of them this year!";
+      imageUrl = item.images?.[0]?.url ?? undefined;
+      imageAlt = item.name;
+    } else if (isTrack(item)) {
+      description = item.artists.map((a) => a.name).join(", ");
+      imageUrl = item.album.images[0]?.url || undefined;
+      imageAlt = `${item.name} by ${item.artists[0]?.name}`;
+    }
+  }
 
-  const derivedItemUrl = item
-    ? (item.external_urls?.spotify ?? undefined)
-    : itemUrl;
-
-  const finalValue = derivedValue ?? "";
-  const finalDescription = derivedDescription ?? "";
-  const finalImageUrl = derivedImageUrl;
-  const finalImageAlt = derivedImageAlt;
-  const finalItemUrl = derivedItemUrl;
-
-  const content = (
+  const content = isLoading ? (
+    <FactCardSkeleton />
+  ) : (
     <>
-      {finalImageUrl ? (
+      {imageUrl ? (
         <img
-          src={finalImageUrl}
-          alt={finalImageAlt ?? title}
+          src={imageUrl}
+          alt={imageAlt ?? title}
           className="fact-card-image"
         />
       ) : (
         icon && <div className="fact-card-icon">{icon}</div>
       )}
-      <div className="fact-card-value">{finalValue}</div>
-      <p className="fact-card-description">{finalDescription}</p>
+      <div className="fact-card-value">{value}</div>
+      <p className="fact-card-description">{description}</p>
     </>
   );
 
   return (
     <Card title={title}>
       <div className="fact-card-content">
-        {finalItemUrl ? (
+        {itemUrl ? (
           <a
-            href={finalItemUrl}
+            href={itemUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="fact-item-link"
