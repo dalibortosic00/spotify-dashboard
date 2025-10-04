@@ -22,11 +22,15 @@ export const getStoredAuth = (): AuthStorage | null => {
     const auth = JSON.parse(storedAuth) as AuthStorage;
     const isExpired = Date.now() - auth.loginTime > 3600000; // 1 hour
     if (isExpired) {
-      localStorage.removeItem("spotify_auth");
+      removeStoredAuth();
       return null;
     }
     return auth;
   }
 
   return null;
+};
+
+export const removeStoredAuth = () => {
+  localStorage.removeItem("spotify_auth");
 };

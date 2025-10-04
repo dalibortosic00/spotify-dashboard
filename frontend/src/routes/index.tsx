@@ -1,5 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import FactCard from "../components/FactCard.tsx";
 import TopItemsCard from "../components/TopItemsCard.tsx";
 import { useAuth } from "../hooks/useAuth.ts";
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
 function DashboardPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>("medium_term");
   const limit = 20;
-  const { token, isCheckingToken } = useAuth();
+  const { token, isCheckingToken, logOut } = useAuth();
   const {
     data: topItems,
     isLoading,
@@ -35,8 +35,15 @@ function DashboardPage() {
     enabled: !isCheckingToken,
   });
   const { data: currentUser } = useCurrentUser({ token });
+  const navigate = useNavigate();
 
-  if (error) {
+  useEffect(() => {
+    if (!isCheckingToken && !token) {
+      navigate({ to: "/login" });
+    }
+  }, [token, isCheckingToken, navigate]);
+
+  if (error || !token) {
     return (
       <p className="error-message">
         Failed to load Spotify data. Your session might have expired. Please try
@@ -50,9 +57,14 @@ function DashboardPage() {
 
   return (
     <>
-      <h1>
-        {currentUser ? `Welcome, ${currentUser.display_name}` : "Welcome"}
-      </h1>
+      <div className="header">
+        <h1>
+          {currentUser ? `Welcome, ${currentUser.display_name}` : "Welcome"}
+        </h1>
+        <button type="button" onClick={logOut}>
+          Log Out
+        </button>
+      </div>
       <div className="time-range-buttons">
         <button
           type="button"
@@ -86,22 +98,12 @@ function DashboardPage() {
         <FactCard
           title="Your Top Artist"
           item={topArtists?.[0]}
-          icon={
-            <span role="img" aria-label="star">
-              ⭐
-            </span>
-          }
           isLoading={isLoading}
         />
 
         <FactCard
           title="Your Top Track"
           item={topTracks?.[0]}
-          icon={
-            <span role="img" aria-label="music note">
-              🎵
-            </span>
-          }
           isLoading={isLoading}
         />
 
