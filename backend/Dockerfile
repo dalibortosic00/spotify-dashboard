@@ -1,5 +1,5 @@
 # Dev
-FROM python:3.12 AS dev
+FROM python:3.13 AS dev
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY backend/ /app/
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 # Prod
-FROM python:3.12 AS prod
+FROM python:3.13 AS prod
 
 WORKDIR /app
 
