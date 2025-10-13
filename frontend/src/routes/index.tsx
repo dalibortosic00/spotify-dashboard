@@ -39,7 +39,7 @@ function DashboardPage() {
 
   useEffect(() => {
     if (!isCheckingToken && !token) {
-      navigate({ to: "/login" });
+      void navigate({ to: "/login" });
     }
   }, [token, isCheckingToken, navigate]);
 

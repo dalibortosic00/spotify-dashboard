@@ -14,4 +14,6 @@
   "prettier.prettierPath": "frontend/.yarn/sdks/prettier/index.cjs",
   "typescript.tsdk": "frontend/.yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "python-envs.defaultEnvManager": "ms-python.python:pyenv",
+  "python-envs.pythonProjects": [],
 }

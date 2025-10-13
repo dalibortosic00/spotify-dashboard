@@ -17,6 +17,7 @@ export const useAuth = (): AuthState => {
 
   useEffect(() => {
     const auth = getStoredAuth();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setToken(auth ? auth.token : null);
     setIsCheckingToken(false);
   }, []);
