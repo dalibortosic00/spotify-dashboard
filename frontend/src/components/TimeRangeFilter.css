@@ -1,0 +1,23 @@
+.time-range-filter {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.time-range-button {
+  background-color: #282828;
+  color: #b3b3b3;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-range-button.active {
+  background-color: #1db954;
+  color: #ffffff;
+}
+
+.time-range-button:hover:not(.active) {
+  border-color: #ffffff;
+  color: #ffffff;
+}

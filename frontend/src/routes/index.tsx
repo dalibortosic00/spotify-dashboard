@@ -9,6 +9,8 @@ import { useCurrentUser } from "../hooks/useCurrentUser.ts";
 // import GenreChart from "../components/GenreChart.tsx";
 import { getStoredAuth } from "../utils/auth.ts";
 import type { TimeRange } from "../types.ts";
+import TimeRangeFilter from "../components/TimeRangeFilter.tsx";
+import DashboardHeader from "../components/DashboardHeader.tsx";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -57,43 +59,13 @@ function DashboardPage() {
 
   return (
     <>
-      <div className="header">
-        <h1>
-          {currentUser ? `Welcome, ${currentUser.display_name}` : "Welcome"}
-        </h1>
-        <button type="button" onClick={logOut}>
-          Log Out
-        </button>
-      </div>
-      <div className="time-range-buttons">
-        <button
-          type="button"
-          className={timeRange === "long_term" ? "active" : ""}
-          onClick={() => {
-            setTimeRange("long_term");
-          }}
-        >
-          Last Year
-        </button>
-        <button
-          type="button"
-          className={timeRange === "medium_term" ? "active" : ""}
-          onClick={() => {
-            setTimeRange("medium_term");
-          }}
-        >
-          Last 6 Months
-        </button>
-        <button
-          type="button"
-          className={timeRange === "short_term" ? "active" : ""}
-          onClick={() => {
-            setTimeRange("short_term");
-          }}
-        >
-          Last 4 Weeks
-        </button>
-      </div>
+      <DashboardHeader currentUser={currentUser} logOut={logOut} />
+
+      <TimeRangeFilter
+        currentTimeRange={timeRange}
+        onTimeRangeChange={setTimeRange}
+      />
+
       <div className="dashboard-grid">
         <FactCard
           title="Your Top Artist"
