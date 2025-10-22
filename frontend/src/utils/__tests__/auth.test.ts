@@ -1,41 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { getStoredAuth, removeStoredAuth, type AuthStorage } from "../auth.ts";
 
-// Provide a minimal localStorage polyfill when running in a Node environment
-if (typeof globalThis.localStorage === "undefined") {
-  let store: Record<string, string> = {};
-  globalThis.localStorage = {
-    getItem(key: string) {
-      return Object.prototype.hasOwnProperty.call(store, key)
-        ? store[key]
-        : null;
-    },
-    setItem(key: string, value: string) {
-      store[key] = value;
-    },
-    removeItem(key: string) {
-      // avoid `delete` to satisfy static analyzers: create a new object without the key
-      store = Object.fromEntries(
-        Object.entries(store).filter(([k]) => k !== key),
-      );
-    },
-    clear() {
-      store = {};
-    },
-  } as Storage;
-}
-
-function setGlobalLocationSearch(search: string) {
-  // Provide a minimal `window` + `history` for the utils which read `window.location.search`
-  const fakeWindow = {
-    location: { search },
-    history: {
-      replaceState: (...args: unknown[]) => {
-        void JSON.stringify(args);
-      },
-    },
-  };
-  (globalThis as unknown as Record<string, unknown>).window = fakeWindow;
+function setLocationSearch(search: string) {
+  const url = new URL(window.location.href);
+  url.search = search;
+  window.history.replaceState({}, "", url.toString());
 }
 
 describe("auth utils", () => {
@@ -56,16 +25,16 @@ describe("auth utils", () => {
   beforeEach(() => {
     localStorage.clear();
     // reset URL
-    setGlobalLocationSearch("");
+    setLocationSearch("");
   });
 
   afterEach(() => {
     localStorage.clear();
-    setGlobalLocationSearch("");
+    setLocationSearch("");
   });
 
   it("stores token from URL and returns auth object", () => {
-    setGlobalLocationSearch("?access_token=abc123");
+    setLocationSearch("?access_token=abc123");
     const auth = getStoredAuth();
     assertAuth(auth);
     expect(auth.token).toBe("abc123");
