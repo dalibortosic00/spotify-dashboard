@@ -9,6 +9,7 @@ import reactX from "eslint-plugin-react-x";
 import reactDom from "eslint-plugin-react-dom";
 import pluginQuery from "@tanstack/eslint-plugin-query";
 import pluginRouter from "@tanstack/eslint-plugin-router";
+import testingLibrary from "eslint-plugin-testing-library";
 
 export default defineConfig(
   { ignores: ["dist", ".yarn", ".pnp.*", "src/routeTree.gen.ts"] },
@@ -20,6 +21,7 @@ export default defineConfig(
       eslintConfigPrettier,
       ...pluginQuery.configs["flat/recommended"],
       ...pluginRouter.configs["flat/recommended"],
+      testingLibrary.configs["flat/react"],
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
