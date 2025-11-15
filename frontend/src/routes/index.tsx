@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
 
 function DashboardPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>("medium_term");
-  const limit = 20;
+  const limit = 10;
   const { token, isCheckingToken, logOut } = useAuth();
   const {
     data: topItems,
@@ -54,8 +54,8 @@ function DashboardPage() {
     );
   }
 
-  const topArtists = topItems?.top_artists.items;
-  const topTracks = topItems?.top_tracks.items;
+  const topArtists = topItems?.top_artists?.items;
+  const topTracks = topItems?.top_tracks?.items;
 
   return (
     <>
@@ -81,14 +81,14 @@ function DashboardPage() {
 
         <TopItemsCard
           title="Your Top Artists"
-          length={10}
+          length={limit}
           items={topArtists}
           isLoading={isLoading}
         />
 
         <TopItemsCard
           title="Your Top Tracks"
-          length={10}
+          length={limit}
           items={topTracks}
           isLoading={isLoading}
         />

@@ -89,6 +89,7 @@ export interface User {
 export type TimeRange = "long_term" | "medium_term" | "short_term";
 
 export interface TopItemsParams {
+  type?: "artists" | "tracks";
   limit?: number;
   offset?: number;
   time_range?: TimeRange;
@@ -105,6 +106,6 @@ export interface TopItemsResponse<T extends Artist | Track> {
 }
 
 export interface TopItems {
-  top_artists: TopItemsResponse<Artist>;
-  top_tracks: TopItemsResponse<Track>;
+  top_artists?: TopItemsResponse<Artist>;
+  top_tracks?: TopItemsResponse<Track>;
 }

@@ -57,10 +57,18 @@ async def get_user_top_items(
     if not token:
         raise HTTPException(status_code=400, detail="Access token required")
 
-    top_artists = cast(
-        TopItemsResponse[Artist], await get_top_items(token, "artists", params)
-    )
-    top_tracks = cast(
-        TopItemsResponse[Track], await get_top_items(token, "tracks", params)
-    )
+    top_artists = None
+    top_tracks = None
+    type = params.type
+
+    if type is None or type == "artists":
+        top_artists = cast(
+            TopItemsResponse[Artist], await get_top_items(token, "artists", params)
+        )
+
+    if type is None or type == "tracks":
+        top_tracks = cast(
+            TopItemsResponse[Track], await get_top_items(token, "tracks", params)
+        )
+
     return TopItems(top_artists=top_artists, top_tracks=top_tracks)

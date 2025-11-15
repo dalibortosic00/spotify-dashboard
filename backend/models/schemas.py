@@ -95,6 +95,7 @@ class TokenResponse(BaseModel):
 
 
 class TopItemsParams(BaseModel):
+    type: Optional[Literal["artists", "tracks"]] = None
     limit: int = Field(20, ge=1, le=50)
     time_range: Literal["long_term", "medium_term", "short_term"] = "medium_term"
     offset: int = Field(0, ge=0)
@@ -114,5 +115,5 @@ class TopItemsResponse(BaseModel, Generic[T]):
 
 
 class TopItems(BaseModel):
-    top_artists: TopItemsResponse[Artist]
-    top_tracks: TopItemsResponse[Track]
+    top_artists: Optional[TopItemsResponse[Artist]]
+    top_tracks: Optional[TopItemsResponse[Track]]

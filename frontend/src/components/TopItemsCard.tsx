@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import type { FC } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -84,6 +85,12 @@ const TopItemsCard: FC<TopItemsCardProps> = ({
           ))
         )}
       </ul>
+      <Link
+        to="/details"
+        search={{ type: items && isArtist(items[0]) ? "artists" : "tracks" }}
+      >
+        View More
+      </Link>
     </Card>
   );
 };

@@ -13,11 +13,19 @@ export const useTopItems = ({
   params = {},
   enabled = true,
 }: UseTopItemsOptions) => {
+  const { type, limit, offset, time_range } = params;
+
   return useQuery<TopItems>({
-    queryKey: ["topItems", token, params],
+    queryKey: ["topItems", token, type, limit, offset, time_range],
     queryFn: async () => {
       const response = await API.get("/me/top", {
-        params: { token, ...params },
+        params: {
+          token,
+          type,
+          limit,
+          offset,
+          time_range,
+        },
       });
       return response.data as TopItems;
     },
