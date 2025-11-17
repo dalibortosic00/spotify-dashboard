@@ -84,6 +84,7 @@ function DashboardPage() {
           length={limit}
           items={topArtists}
           isLoading={isLoading}
+          timeRange={timeRange}
         />
 
         <TopItemsCard
@@ -91,6 +92,7 @@ function DashboardPage() {
           length={limit}
           items={topTracks}
           isLoading={isLoading}
+          timeRange={timeRange}
         />
 
         {/* <ChartCard title="Your Top Genres" subtitle="Based on your top artists">

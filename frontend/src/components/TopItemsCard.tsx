@@ -3,7 +3,7 @@ import type { FC } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Card from "./Card.tsx";
-import type { Artist, Track } from "../types.ts";
+import type { Artist, TimeRange, Track } from "../types.ts";
 import { isArtist, isTrack } from "../utils/typeGuards.ts";
 import "./TopItemsCard.css";
 
@@ -12,6 +12,8 @@ interface TopItemsCardProps {
   length: number;
   items?: Artist[] | Track[];
   isLoading?: boolean;
+  detailed?: boolean;
+  timeRange?: TimeRange;
 }
 
 const TopItemsCardSkeleton: FC<Pick<TopItemsCardProps, "length">> = ({
@@ -41,6 +43,8 @@ const TopItemsCard: FC<TopItemsCardProps> = ({
   length,
   items,
   isLoading,
+  detailed,
+  timeRange,
 }) => {
   return (
     <Card title={title}>
@@ -85,12 +89,17 @@ const TopItemsCard: FC<TopItemsCardProps> = ({
           ))
         )}
       </ul>
-      <Link
-        to="/details"
-        search={{ type: items && isArtist(items[0]) ? "artists" : "tracks" }}
-      >
-        View More
-      </Link>
+      {!detailed && (
+        <Link
+          to="/details"
+          search={{
+            type: items && isArtist(items[0]) ? "artists" : "tracks",
+            time_range: timeRange,
+          }}
+        >
+          View More
+        </Link>
+      )}
     </Card>
   );
 };

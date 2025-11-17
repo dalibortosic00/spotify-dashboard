@@ -86,7 +86,10 @@ export interface User {
   uri: string;
 }
 
-export type TimeRange = "long_term" | "medium_term" | "short_term";
+export const TimeRanges = ["long_term", "medium_term", "short_term"] as const;
+export type TimeRange = (typeof TimeRanges)[number];
+
+export const ItemTypes = ["artists", "tracks"] as const;
 
 export interface TopItemsParams {
   type?: "artists" | "tracks";
