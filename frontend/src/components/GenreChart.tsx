@@ -7,7 +7,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import type { Artist } from "../types.ts";
+import type { Artist } from "../types/index.ts";
 
 const CHART_COLORS = [
   "#1DB954", // Spotify Green

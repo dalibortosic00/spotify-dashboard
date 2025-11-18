@@ -3,7 +3,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Card from "./Card.tsx";
 import "./FactCard.css";
-import type { Artist, Track } from "../types.ts";
+import type { Artist, Track } from "../types/index.ts";
 import { isArtist, isTrack } from "../utils/typeGuards.ts";
 
 interface FactCardProps {

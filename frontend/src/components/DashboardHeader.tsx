@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { User } from "../types.ts";
+import type { User } from "../types/index.ts";
 import "./DashboardHeader.css";
 
 interface DashboardHeaderProps {

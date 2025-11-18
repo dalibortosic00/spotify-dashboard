@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { User } from "../types.ts";
+import type { User } from "../types/index.ts";
 import API from "../api.ts";
 
 interface UseCurrentUserOptions {

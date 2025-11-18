@@ -8,7 +8,7 @@ import { useCurrentUser } from "../hooks/useCurrentUser.ts";
 // import ChartCard from "../components/ChartCard.tsx";
 // import GenreChart from "../components/GenreChart.tsx";
 import { getStoredAuth } from "../utils/auth.ts";
-import type { TimeRange } from "../types.ts";
+import type { TimeRange } from "../types/index.ts";
 import TimeRangeFilter from "../components/TimeRangeFilter.tsx";
 import DashboardHeader from "../components/DashboardHeader.tsx";
 

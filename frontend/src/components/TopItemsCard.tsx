@@ -3,7 +3,7 @@ import type { FC } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Card from "./Card.tsx";
-import type { Artist, TimeRange, Track } from "../types.ts";
+import type { Artist, Track, TimeRange } from "../types/index.ts";
 import { isArtist, isTrack } from "../utils/typeGuards.ts";
 import "./TopItemsCard.css";
 

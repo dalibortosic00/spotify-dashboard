@@ -1,4 +1,4 @@
-import type { Artist, Track } from "../types.ts";
+import type { Artist, Track } from "../types/index.ts";
 
 export function isArtist(item: Artist | Track): item is Artist {
   return item.type === "artist";

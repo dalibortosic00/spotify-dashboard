@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useTopItems } from "../hooks/useTopItems.ts";
 import { useAuth } from "../hooks/useAuth.ts";
 import TopItemsCard from "../components/TopItemsCard.tsx";
-import { ItemTypes, TimeRanges } from "../types.ts";
+import { ItemTypes, TimeRanges } from "../types/index.ts";
 
 const detailsSearchSchema = z.object({
   type: z.enum(ItemTypes),

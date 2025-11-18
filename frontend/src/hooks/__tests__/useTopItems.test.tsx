@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from "vitest";
 import API from "../../api.ts";
 import { useTopItems } from "../useTopItems.ts";
 import { renderHookWithProviders } from "../../test-utils/renderWithProviders.tsx";
-import type { TopItems } from "../../types.ts";
+import type { TopItems } from "../../types/index.ts";
 
 describe("useTopItems", () => {
   it("calls API.get with token and params and returns data", async () => {

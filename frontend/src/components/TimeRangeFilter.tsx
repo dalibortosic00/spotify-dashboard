@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { TimeRange } from "../types.ts";
+import type { TimeRange } from "../types/index.ts";
 import "./TimeRangeFilter.css";
 
 const TIME_RANGES: { value: TimeRange; label: string }[] = [

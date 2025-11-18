@@ -2,7 +2,7 @@ import { waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import API from "../../api.ts";
 import { useCurrentUser } from "../useCurrentUser.ts";
-import type { User } from "../../types.ts";
+import type { User } from "../../types/index.ts";
 import { renderHookWithProviders } from "../../test-utils/renderWithProviders.tsx";
 
 describe("useCurrentUser", () => {

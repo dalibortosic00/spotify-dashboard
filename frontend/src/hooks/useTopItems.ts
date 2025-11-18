@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { TopItems, TopItemsParams } from "../types.ts";
+import type { TopItems, TopItemsParams } from "../types/index.ts";
 import API from "../api.ts";
 
 interface UseTopItemsOptions {
